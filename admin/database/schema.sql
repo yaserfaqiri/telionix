@@ -1,0 +1,147 @@
+CREATE DATABASE IF NOT EXISTS telionix_admin
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE telionix_admin;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR(120) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(180) NULL,
+  role VARCHAR(60) NOT NULL DEFAULT 'admin',
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_username (username)
+);
+
+CREATE TABLE IF NOT EXISTS header_slides (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NULL,
+  cta_label VARCHAR(120) NULL,
+  cta_link VARCHAR(500) NULL,
+  desktop_image VARCHAR(500) NOT NULL,
+  mobile_image VARCHAR(500) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS banners (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NULL,
+  target_link VARCHAR(500) NULL,
+  desktop_image VARCHAR(500) NOT NULL,
+  mobile_image VARCHAR(500) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS box_banners (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NULL,
+  target_link VARCHAR(500) NULL,
+  desktop_image VARCHAR(500) NOT NULL,
+  mobile_image VARCHAR(500) NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(160) NOT NULL,
+  slug VARCHAR(180) NOT NULL,
+  description TEXT NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_categories_name (name),
+  UNIQUE KEY uq_categories_slug (slug)
+);
+
+CREATE TABLE IF NOT EXISTS products (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  sku VARCHAR(120) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  category_id INT UNSIGNED NULL,
+  category VARCHAR(120) NOT NULL,
+  price DECIMAL(10,2) NULL,
+  rating DECIMAL(3,2) NULL,
+  reviews INT NOT NULL DEFAULT 0,
+  views INT NOT NULL DEFAULT 0,
+  badge_text VARCHAR(120) NULL,
+  short_description TEXT NULL,
+  desktop_image VARCHAR(500) NOT NULL,
+  mobile_image VARCHAR(500) NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_products_sku (sku)
+);
+
+CREATE TABLE IF NOT EXISTS product_gallery_images (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  product_id INT UNSIGNED NOT NULL,
+  image_path VARCHAR(500) NOT NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_product_gallery_product (product_id)
+);
+
+CREATE TABLE IF NOT EXISTS support_settings (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  hero_title VARCHAR(255) NOT NULL,
+  hero_subtitle TEXT NULL,
+  hero_image VARCHAR(500) NULL,
+  find_model_text VARCHAR(255) NULL,
+  sign_in_note TEXT NULL,
+  notice_label VARCHAR(120) NULL,
+  notice_text TEXT NULL,
+  notice_date VARCHAR(60) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS support_help_cards (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NULL,
+  href VARCHAR(500) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS support_promo_cards (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  subtitle TEXT NULL,
+  image_path VARCHAR(500) NULL,
+  href VARCHAR(500) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS support_contact_methods (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  href VARCHAR(500) NULL,
+  icon VARCHAR(80) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);

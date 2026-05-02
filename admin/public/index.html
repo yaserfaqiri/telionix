@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telionix Admin Panel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <section id="authGate" class="auth-gate active">
+      <div class="auth-panel">
+        <div class="auth-brand-mark">
+          <img src="/telionix-logo.png" alt="Telionix" onerror="this.style.display='none'" />
+          <div>
+            <strong>Telionix Admin</strong>
+            <span>Secure dashboard access</span>
+          </div>
+        </div>
+
+        <div class="auth-copy">
+          <h1>Sign in to continue</h1>
+          <p>Access categories, header images, banners, and products from one clean management dashboard.</p>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <label>
+            <span>Username</span>
+            <input id="loginUsername" name="username" type="text" placeholder="Enter username" required />
+          </label>
+          <label>
+            <span>Password</span>
+            <input id="loginPassword" name="password" type="password" placeholder="Enter password" required />
+          </label>
+          <button type="submit" class="primary-button auth-submit">Login</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo-box">
+            <img src="/telionix-logo.png" alt="Telionix" onerror="this.style.display='none'" />
+          </div>
+          <div class="sidebar-brand-copy">
+            <strong>Telionix</strong>
+            <span>DASHBOARD</span>
+          </div>
+        </div>
+
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">OVERVIEW</div>
+          <nav class="sidebar-nav">
+            <button class="sidebar-link active" data-panel="categories">
+              <span class="sidebar-link-icon"></span>
+              <span>Categories</span>
+            </button>
+            <button class="sidebar-link" data-panel="headers">
+              <span class="sidebar-link-icon"></span>
+              <span>Header Images</span>
+            </button>
+            <button class="sidebar-link" data-panel="banners">
+              <span class="sidebar-link-icon"></span>
+              <span>Banners</span>
+            </button>
+            <button class="sidebar-link" data-panel="box-banners">
+              <span class="sidebar-link-icon"></span>
+              <span>Box Banners</span>
+            </button>
+            <button class="sidebar-link" data-panel="products">
+              <span class="sidebar-link-icon"></span>
+              <span>Products</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-group">
+          <div class="sidebar-group-title">CONTENT</div>
+          <div class="sidebar-summary-list">
+            <div class="sidebar-summary-item">
+              <span>Categories</span>
+              <strong id="categoryCount">0</strong>
+            </div>
+            <div class="sidebar-summary-item">
+              <span>Headers</span>
+              <strong id="headerCount">0</strong>
+            </div>
+            <div class="sidebar-summary-item">
+              <span>Banners</span>
+              <strong id="bannerCount">0</strong>
+            </div>
+            <div class="sidebar-summary-item">
+              <span>Box Banners</span>
+              <strong id="boxBannerCount">0</strong>
+            </div>
+            <div class="sidebar-summary-item">
+              <span>Products</span>
+              <strong id="productCount">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar" id="sidebarUserAvatar">AD</div>
+          <div class="sidebar-user-copy">
+            <strong id="currentUserChip">Guest</strong>
+            <span>Admin</span>
+          </div>
+          <button id="logoutButton" type="button" class="sidebar-logout" aria-label="Logout">↗</button>
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <header class="topbar">
+          <label class="topbar-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5"></circle>
+              <path d="M16 16l4.5 4.5"></path>
+            </svg>
+            <input type="text" placeholder="Search anything..." />
+            <span class="topbar-shortcut">⌘K</span>
+          </label>
+
+          <div class="topbar-actions">
+            <button id="globalAddButton" type="button" class="dark-button">+ New Category</button>
+            <button type="button" class="icon-button" aria-label="Theme">◔</button>
+            <button type="button" class="icon-button" aria-label="Palette">◌</button>
+            <button type="button" class="icon-button" aria-label="Notifications">•</button>
+            <div class="avatar-badge" id="topbarAvatar">AD</div>
+            <div id="statusBadge" class="status-badge">Loading...</div>
+          </div>
+        </header>
+
+        <section id="panel-categories" class="panel-section active">
+          <div class="page-head">
+            <div class="page-head-copy">
+              <div class="breadcrumbs">Dashboard <span>›</span> Categories</div>
+              <h1>Categories</h1>
+              <p>Create and manage categories to use later in products.</p>
+            </div>
+            <button type="button" class="dark-button panel-add-button" data-modal="categoryModal">+ Add Category</button>
+          </div>
+
+          <div class="page-tabs">
+            <button class="page-tab active">All</button>
+            <button class="page-tab">Active</button>
+            <button class="page-tab">Archived</button>
+          </div>
+
+          <div class="toolbar-row">
+            <label class="toolbar-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5"></circle>
+                <path d="M16 16l4.5 4.5"></path>
+              </svg>
+              <input id="categorySearch" type="text" placeholder="Search categories..." />
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="ghost-button">Columns</button>
+              <button type="button" class="ghost-button">Export</button>
+            </div>
+          </div>
+
+          <div class="table-shell">
+            <div class="table-head table-head-categories">
+              <span>Category</span>
+              <span>Slug</span>
+              <span>Status</span>
+              <span>Created</span>
+              <span></span>
+            </div>
+            <div id="categoryList" class="table-body"></div>
+          </div>
+        </section>
+
+        <section id="panel-headers" class="panel-section">
+          <div class="page-head">
+            <div class="page-head-copy">
+              <div class="breadcrumbs">Dashboard <span>›</span> Header Images</div>
+              <h1>Header Images</h1>
+              <p>Browse and manage desktop and mobile hero slides.</p>
+            </div>
+            <button type="button" class="dark-button panel-add-button" data-modal="headerModal">+ Add Header</button>
+          </div>
+
+          <div class="page-tabs">
+            <button class="page-tab active">All</button>
+            <button class="page-tab">Active</button>
+            <button class="page-tab">Draft</button>
+            <button class="page-tab">Archived</button>
+          </div>
+
+          <div class="toolbar-row">
+            <label class="toolbar-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5"></circle>
+                <path d="M16 16l4.5 4.5"></path>
+              </svg>
+              <input id="headerSearch" type="text" placeholder="Search header images..." />
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="ghost-button">Columns</button>
+              <button type="button" class="ghost-button">Export</button>
+            </div>
+          </div>
+
+          <div class="table-shell">
+            <div class="table-head table-head-headers">
+              <span>Slide</span>
+              <span>CTA</span>
+              <span>Order</span>
+              <span>Responsive</span>
+              <span>Created</span>
+              <span></span>
+            </div>
+            <div id="headerList" class="table-body"></div>
+          </div>
+        </section>
+
+        <section id="panel-banners" class="panel-section">
+          <div class="page-head">
+            <div class="page-head-copy">
+              <div class="breadcrumbs">Dashboard <span>›</span> Banners</div>
+              <h1>Banners</h1>
+              <p>Browse and manage promotional banners for desktop and mobile.</p>
+            </div>
+            <button type="button" class="dark-button panel-add-button" data-modal="bannerModal">+ Add Banner</button>
+          </div>
+
+          <div class="page-tabs">
+            <button class="page-tab active">All</button>
+            <button class="page-tab">Published</button>
+            <button class="page-tab">Draft</button>
+            <button class="page-tab">Archived</button>
+          </div>
+
+          <div class="toolbar-row">
+            <label class="toolbar-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5"></circle>
+                <path d="M16 16l4.5 4.5"></path>
+              </svg>
+              <input id="bannerSearch" type="text" placeholder="Search banners..." />
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="ghost-button">Columns</button>
+              <button type="button" class="ghost-button">Export</button>
+            </div>
+          </div>
+
+          <div class="table-shell">
+            <div class="table-head table-head-banners">
+              <span>Banner</span>
+              <span>Target</span>
+              <span>Order</span>
+              <span>Responsive</span>
+              <span>Created</span>
+              <span></span>
+            </div>
+            <div id="bannerList" class="table-body"></div>
+          </div>
+        </section>
+
+        <section id="panel-products" class="panel-section">
+          <div class="page-head">
+            <div class="page-head-copy">
+              <div class="breadcrumbs">Dashboard <span>›</span> Products</div>
+              <h1>Products</h1>
+              <p>Browse and manage your product catalog.</p>
+            </div>
+            <button type="button" class="dark-button panel-add-button" data-modal="productModal">+ Add Product</button>
+          </div>
+
+          <div class="page-tabs">
+            <button class="page-tab active">All</button>
+            <button class="page-tab">Active</button>
+            <button class="page-tab">Draft</button>
+            <button class="page-tab">Archived</button>
+          </div>
+
+          <div class="toolbar-row">
+            <label class="toolbar-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5"></circle>
+                <path d="M16 16l4.5 4.5"></path>
+              </svg>
+              <input id="productSearch" type="text" placeholder="Search products..." />
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="ghost-button">Columns</button>
+              <button type="button" class="ghost-button">Export</button>
+            </div>
+          </div>
+
+          <div class="table-shell">
+            <div class="table-head table-head-products">
+              <span>Product</span>
+              <span>Category</span>
+              <span>Status</span>
+              <span>Price</span>
+              <span>Created</span>
+              <span></span>
+            </div>
+            <div id="productList" class="table-body"></div>
+          </div>
+        </section>
+
+        <section id="panel-box-banners" class="panel-section">
+          <div class="page-head">
+            <div class="page-head-copy">
+              <div class="breadcrumbs">Dashboard <span>â€º</span> Box Banners</div>
+              <h1>Box Banners</h1>
+              <p>Manage the three promo boxes shown on the home page. The website displays the latest three records.</p>
+            </div>
+            <button type="button" class="dark-button panel-add-button" data-modal="boxBannerModal">+ Add Box Banner</button>
+          </div>
+
+          <div class="page-tabs">
+            <button class="page-tab active">Latest</button>
+            <button class="page-tab">Published</button>
+            <button class="page-tab">Archive</button>
+          </div>
+
+          <div class="toolbar-row">
+            <label class="toolbar-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5"></circle>
+                <path d="M16 16l4.5 4.5"></path>
+              </svg>
+              <input id="boxBannerSearch" type="text" placeholder="Search box banners..." />
+            </label>
+            <div class="toolbar-actions">
+              <button type="button" class="ghost-button">Columns</button>
+              <button type="button" class="ghost-button">Export</button>
+            </div>
+          </div>
+
+          <div class="table-shell">
+            <div class="table-head table-head-box-banners">
+              <span>Banner</span>
+              <span>Target</span>
+              <span>Responsive</span>
+              <span>Created</span>
+              <span></span>
+            </div>
+            <div id="boxBannerList" class="table-body"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="categoryModal" class="modal-shell">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Add Category</h2>
+            <p>Create a category and use it later in the product form.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="categoryModal">×</button>
+        </div>
+        <form id="categoryForm" class="modal-form">
+          <div class="modal-grid">
+            <label>
+              <span>Category Name</span>
+              <input name="name" type="text" placeholder="TVs" required />
+            </label>
+            <label class="full">
+              <span>Description</span>
+              <textarea name="description" rows="4" placeholder="Short category description"></textarea>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-button" data-close-modal="categoryModal">Cancel</button>
+            <button type="submit" class="dark-button">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="headerModal" class="modal-shell">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Add Header Slide</h2>
+            <p>Create a responsive hero slide with desktop and mobile images.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="headerModal">×</button>
+        </div>
+        <form id="headerForm" class="modal-form">
+          <div class="modal-grid">
+            <label>
+              <span>Title</span>
+              <input name="title" type="text" placeholder="Header title" required />
+            </label>
+            <label>
+              <span>Order</span>
+              <input name="displayOrder" type="number" min="0" value="0" />
+            </label>
+            <label class="full">
+              <span>Subtitle</span>
+              <textarea name="subtitle" rows="3" placeholder="Optional copy"></textarea>
+            </label>
+            <label>
+              <span>CTA Label</span>
+              <input name="ctaLabel" type="text" placeholder="Learn More" />
+            </label>
+            <label>
+              <span>CTA Link</span>
+              <input name="ctaLink" type="url" placeholder="https://example.com" />
+            </label>
+            <label>
+              <span>Desktop Image</span>
+              <input name="desktopImage" type="file" accept="image/*" required />
+            </label>
+            <label>
+              <span>Mobile Image</span>
+              <input name="mobileImage" type="file" accept="image/*" />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-button" data-close-modal="headerModal">Cancel</button>
+            <button type="submit" class="dark-button">Save Header</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="bannerModal" class="modal-shell">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Add Banner</h2>
+            <p>Upload a banner with separate assets for desktop and mobile.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="bannerModal">×</button>
+        </div>
+        <form id="bannerForm" class="modal-form">
+          <div class="modal-grid">
+            <label>
+              <span>Title</span>
+              <input name="title" type="text" placeholder="Banner title" required />
+            </label>
+            <label>
+              <span>Order</span>
+              <input name="displayOrder" type="number" min="0" value="0" />
+            </label>
+            <label class="full">
+              <span>Subtitle</span>
+              <textarea name="subtitle" rows="3" placeholder="Optional text"></textarea>
+            </label>
+            <label class="full">
+              <span>Target Link</span>
+              <input name="targetLink" type="url" placeholder="https://example.com/banner" />
+            </label>
+            <label>
+              <span>Desktop Image</span>
+              <input name="desktopImage" type="file" accept="image/*" required />
+            </label>
+            <label>
+              <span>Mobile Image</span>
+              <input name="mobileImage" type="file" accept="image/*" />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-button" data-close-modal="bannerModal">Cancel</button>
+            <button type="submit" class="dark-button">Save Banner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="boxBannerModal" class="modal-shell">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Add Box Banner</h2>
+            <p>Create a home-page promo box card with desktop and mobile images.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="boxBannerModal">Ã—</button>
+        </div>
+        <form id="boxBannerForm" class="modal-form">
+          <div class="modal-grid">
+            <label>
+              <span>Title</span>
+              <input name="title" type="text" placeholder="The Power of SELF-LIT PIXELS" required />
+            </label>
+            <label class="full">
+              <span>Subtitle</span>
+              <textarea name="subtitle" rows="3" placeholder="Optional short subtitle"></textarea>
+            </label>
+            <label class="full">
+              <span>Target Link</span>
+              <input name="targetLink" type="url" placeholder="https://example.com/promo" />
+            </label>
+            <label>
+              <span>Desktop Image</span>
+              <input name="desktopImage" type="file" accept="image/*" required />
+            </label>
+            <label>
+              <span>Mobile Image</span>
+              <input name="mobileImage" type="file" accept="image/*" />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-button" data-close-modal="boxBannerModal">Cancel</button>
+            <button type="submit" class="dark-button">Save Box Banner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="productModal" class="modal-shell">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>Add Product</h2>
+            <p>Create a product record with responsive media.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="productModal">×</button>
+        </div>
+        <form id="productForm" class="modal-form">
+          <div class="modal-grid">
+            <label>
+              <span>SKU</span>
+              <input name="sku" type="text" placeholder="TEL-001" required />
+            </label>
+            <label>
+              <span>Category</span>
+              <select id="productCategorySelect" name="categoryId" required>
+                <option value="">Select category</option>
+              </select>
+            </label>
+            <label class="full">
+              <span>Title</span>
+              <input name="title" type="text" placeholder="Product title" required />
+            </label>
+            <label>
+              <span>Price</span>
+              <input name="price" type="number" step="0.01" min="0" placeholder="999.99" />
+            </label>
+            <label>
+              <span>Rating</span>
+              <input name="rating" type="number" step="0.1" min="0" max="5" placeholder="4.8" />
+            </label>
+            <label>
+              <span>Reviews</span>
+              <input name="reviews" type="number" min="0" value="0" />
+            </label>
+            <label>
+              <span>Views</span>
+              <input name="views" type="number" min="0" value="0" />
+            </label>
+            <label>
+              <span>Badge Text</span>
+              <input name="badgeText" type="text" placeholder="NEW" />
+            </label>
+            <label class="full">
+              <span>Short Description</span>
+              <textarea name="shortDescription" rows="4" placeholder="Short product description"></textarea>
+            </label>
+            <label>
+              <span>Desktop Image</span>
+              <input name="desktopImage" type="file" accept="image/*" required />
+            </label>
+            <label>
+              <span>Mobile Image</span>
+              <input name="mobileImage" type="file" accept="image/*" />
+            </label>
+            <label class="full">
+              <span>Gallery Images</span>
+              <input name="galleryImages" type="file" accept="image/*" multiple />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-button" data-close-modal="productModal">Cancel</button>
+            <button type="submit" class="dark-button">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="detailModal" class="modal-shell">
+      <div class="modal-card detail-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2 id="detailModalTitle">Details</h2>
+            <p>Review full record information.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-modal="detailModal">×</button>
+        </div>
+        <div id="detailModalBody" class="detail-modal-body"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
