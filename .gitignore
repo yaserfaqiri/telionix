@@ -19,3 +19,6 @@ lg-uae-home-clone@1.0.0
 
 .DS_Store
 Thumbs.db
+
+.vscode/
+admin/uploads.zip
